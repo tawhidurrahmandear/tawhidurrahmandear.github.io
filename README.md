@@ -7,8 +7,10 @@ Released under GPL-3.0 license on GitHub
 
 <br>
 <br>
-  
-Go to https://github.com, and create a new repository or rename as username.github.io <br>
-For example, if tawhidurrahmandear is the username, the repository will be tawhidurrahmandear.github.io <br>
-Upload all necessary files here including index.html <br>
-You don't need to do anything else, it will be LIVE automatically within 2 minutes
+
+### How to
+Step 1 : Go to https://github.com, and create a new repository or rename existing one as username.github.io <br>
+Step 2 : For example, if tawhidurrahmandear is the username, the repository name will be exact tawhidurrahmandear.github.io <br>
+Step 3 : Open index.html, go to line 116, simply replace the username "tawhidurrahmandear" with your GitHub username.
+Step 4 : Save the index.html file, and upload to to the recently created/renamed repository on Github.com <br>
+Step 5 : You don't need to do anything else, it will be LIVE automatically within 2 minutes
