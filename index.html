@@ -10,7 +10,7 @@
   <meta name="robots" content="index, follow">
   <meta name="revisit-after" content="monthly">
   <meta http-equiv="cache-control" content="no-cache">
-    <title></title>
+  <title></title>
 	
     <style>
        body {
@@ -113,57 +113,58 @@
 
 
 
-    const username = "tawhidurrahmandear"; // Replace with your GitHub username
-	
-	
+const username = "tawhidurrahmandear"; // Replace with your GitHub username
 
-    fetch(`https://api.github.com/users/${username}`)
-        .then(response => response.json())
-        .then(user => {
-            const developerName = user.name || user.login; // Use full name if available, fallback to username
-            document.title = developerName + " - GitHub Repositories";
-            document.getElementById("developer-name").textContent = developerName;
 
-            const profileButton = document.getElementById("github-profile");
-            const websiteButton = document.getElementById("profile-website");
 
-            profileButton.textContent = `GitHub Profile`;
-            profileButton.onclick = () => window.open(user.html_url, "_blank");
+fetch(`https://api.github.com/users/${username}`)
+    .then(response => response.json())
+    .then(user => {
+        const developerName = user.name || user.login;
+        document.title = developerName + " - GitHub Repositories";
+        document.getElementById("developer-name").textContent = developerName;
 
-            if (user.blog) {
-                websiteButton.textContent = `Homepage`;
-                websiteButton.onclick = () => window.open(user.blog, "_blank");
-            } else {
-                websiteButton.textContent = "No Website Linked";
-                websiteButton.disabled = true;
-                websiteButton.style.backgroundColor = "#999";
+        const profileButton = document.getElementById("github-profile");
+        const websiteButton = document.getElementById("profile-website");
+
+        profileButton.textContent = `GitHub Profile`;
+        profileButton.onclick = () => window.open(user.html_url, "_blank");
+
+        if (user.blog) {
+            websiteButton.textContent = `Homepage`;
+            websiteButton.onclick = () => window.open(user.blog, "_blank");
+        } else {
+            websiteButton.textContent = "No Website Linked";
+            websiteButton.disabled = true;
+            websiteButton.style.backgroundColor = "#999";
+        }
+    })
+    .catch(error => console.error("Error fetching user data:", error));
+
+
+fetch(`https://api.github.com/users/${username}/repos`)
+    .then(response => response.json())
+    .then(repos => {
+        const sitesList = document.getElementById("sites-list");
+
+        repos.forEach(repo => {
+            // Exclude the two specific repositories: "username.github.io" and "username.github.io/username"
+            if (
+                repo.has_pages && 
+                repo.name.toLowerCase() !== `${username.toLowerCase()}` &&  // Exclude "username" repository
+                repo.name.toLowerCase() !== `${username.toLowerCase()}.github.io`  // Exclude "username.github.io"
+            ) {
+                const listItem = document.createElement("li");
+                const link = document.createElement("a");
+                link.href = `https://${username}.github.io/${repo.name}`;
+                link.target = "_blank";
+                link.textContent = repo.name;
+                listItem.appendChild(link);
+                sitesList.appendChild(listItem);
             }
-        })
-        .catch(error => console.error("Error fetching user data:", error));
-
-    fetch(`https://api.github.com/users/${username}/repos`)
-        .then(response => response.json())
-        .then(repos => {
-            const sitesList = document.getElementById("sites-list");
-
-            repos.forEach(repo => {
-                if (repo.has_pages || repo.name.toLowerCase() === username.toLowerCase()) {
-                    const listItem = document.createElement("li");
-                    const link = document.createElement("a");
-                    link.href = `https://${username}.github.io/${repo.name}`;
-                    link.target = "_blank";
-                    link.textContent = repo.name;
-                    listItem.appendChild(link);
-                    sitesList.appendChild(listItem);
-                }
-            });
-        })
-        .catch(error => console.error("Error fetching repositories:", error));
-
-    function openProfile() {
-    }
-    function openWebsite() {
-    }
+        });
+    })
+    .catch(error => console.error("Error fetching repositories:", error));
 	
 
 //  Go to https://github.com, and create a new repository or rename as username.github.io 
