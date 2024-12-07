@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="distribution" content="global">
+  <meta name="rating" content="general">
+  <meta name="robots" content="index, follow">
+  <meta name="revisit-after" content="monthly">
+  <meta http-equiv="cache-control" content="no-cache">
+    <title></title>
+	
+    <style>
+       body {
+            font-family: Tahoma, Ubuntu, 'Trebuchet MS', Geneva, Verdana, sans-serif;
+            background-color: #6600FF;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        header {
+            background-color: #007BF;
+            color: white;
+            width: 100%;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-family: Acme, Tahoma, Ubuntu, 'Trebuchet MS', sans-serif;
+            margin: 0;
+            font-size: 2rem;
+        }
+        h2 {
+            font-family: Tahoma, Ubuntu, 'Trebuchet MS', sans-serif;
+            margin: 0;
+            font-size: 1.0rem;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 auto;
+            width: 90%;
+            max-width: 600px;
+            white-space: pre-wrap;  
+            word-wrap: break-word; 
+            overflow-x: hidden; 
+        }
+        li {
+            margin: 0.8rem 0;
+            padding: 0.5rem 0.8rem;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            text-decoration: none;
+            color: #6600FF;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        button {
+            padding: 15px 20px;
+            background-color: #ffffff;
+            color: #6600FF;
+            font-size: 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.5s ease;
+        }
+            button:hover {
+            background-color: #FFFFFF;
+            color: #0066FF;
+            transition: background-color 0.5s ease;
+        }
+    </style>
+
+</head>
+<body>
+
+<header>
+    <h1 id="developer-name"></h1>
+    <h2>Live Repository Sites</h2>
+</header>
+<ul id="sites-list"></ul>
+<div class="buttons">
+    <button id="github-profile" onclick="openProfile()">GitHub Profile</button>
+    <button id="profile-website" onclick="openWebsite()">Homepage</button>
+</div>
+
+<script>
+
+<!-- Github.io Homepage -->
+<!-- It shows the list of all Live Repository Sites. Simply replace the username and host it here: https://username.github.io -->
+<!-- developed by Tawhidur Rahman Dear, https://www.tawhidurrahmandear.com -->
+<!-- Live Preview available at https://tawhidurrahmandear.github.io -->
+<!-- SourceCode available at https://github.com/tawhidurrahmandear/tawhidurrahmandear -->
+<!-- Released under GPL-3.0 license on Github -->
+
+
+
+    const username = "tawhidurrahmandear"; // Replace with your GitHub username
+	
+	
+
+    fetch(`https://api.github.com/users/${username}`)
+        .then(response => response.json())
+        .then(user => {
+            const developerName = user.name || user.login; // Use full name if available, fallback to username
+            document.title = developerName + " - GitHub Repositories";
+            document.getElementById("developer-name").textContent = developerName;
+
+            const profileButton = document.getElementById("github-profile");
+            const websiteButton = document.getElementById("profile-website");
+
+            profileButton.textContent = `GitHub Profile`;
+            profileButton.onclick = () => window.open(user.html_url, "_blank");
+
+            if (user.blog) {
+                websiteButton.textContent = `Homepage`;
+                websiteButton.onclick = () => window.open(user.blog, "_blank");
+            } else {
+                websiteButton.textContent = "No Website Linked";
+                websiteButton.disabled = true;
+                websiteButton.style.backgroundColor = "#999";
+            }
+        })
+        .catch(error => console.error("Error fetching user data:", error));
+
+    fetch(`https://api.github.com/users/${username}/repos`)
+        .then(response => response.json())
+        .then(repos => {
+            const sitesList = document.getElementById("sites-list");
+
+            repos.forEach(repo => {
+                if (repo.has_pages || repo.name.toLowerCase() === username.toLowerCase()) {
+                    const listItem = document.createElement("li");
+                    const link = document.createElement("a");
+                    link.href = `https://${username}.github.io/${repo.name}`;
+                    link.target = "_blank";
+                    link.textContent = repo.name;
+                    listItem.appendChild(link);
+                    sitesList.appendChild(listItem);
+                }
+            });
+        })
+        .catch(error => console.error("Error fetching repositories:", error));
+
+    function openProfile() {
+    }
+    function openWebsite() {
+    }
+	
+</script>
+</body>
+</html>
